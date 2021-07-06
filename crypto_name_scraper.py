@@ -23,7 +23,7 @@ def scrape_crypto_names():
     listings = crypto_data['props']['initialState']['cryptocurrency']['listingLatest']['data']
 
     for i in listings:
-        cryptos[str(i['name'])] = i['symbol'], i['slug'] #add to dictionary
+        cryptos[str(i['name'])] = str(i['symbol']), str(i['slug']) #add to dictionary
      
     #scrape the rest of the pages
     for i in range (2, pages + 1):
@@ -39,7 +39,7 @@ def scrape_crypto_names():
         listings = crypto_data['props']['initialState']['cryptocurrency']['listingLatest']['data']
 
         for i in listings:
-            cryptos[str(i['name'])] = i['symbol'], i['slug'] #add to dictionary
+            cryptos[str(i['name'])] = str(i['symbol']), str(i['slug']) #add to dictionary
     
     for i in sorted(cryptos.keys()):
         print(i + " " + str(cryptos[i]))
