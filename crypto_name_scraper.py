@@ -17,7 +17,7 @@ def scrape_crypto_names():
     pages = calculate_pages(soup) #get # of pages
      
     #scrape data from pages
-    for i in range (1, 2):
+    for i in range (1, pages + 1):
         time.sleep(0.5)
 
         print("Scraping page " + str(i) + " of " + str(pages) + "...")
@@ -68,7 +68,9 @@ def print_to_csv(cryptos):
     dataframe['symbol'] = crypto_symbols
     dataframe['url'] = crypto_urls
     
-    dataframe.to_csv('cryptonames.csv', index = False)
+    file = 'cryptos.csv'
+    dataframe.to_csv(file, index = False)
     
+    print("Data written to " + file + " successfully!")
 
 scrape_crypto_names()
