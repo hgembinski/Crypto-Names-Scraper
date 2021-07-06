@@ -33,6 +33,8 @@ def scrape_crypto_names():
         for i in listings:
             cryptos[str(i['name'])] = str(i['symbol']), "https://coinmarketcap.com/currencies/" + str(i['slug'])
     
+    print("Done scraping...")
+
     for key in sorted(cryptos):
         sorted_cryptos[key] = cryptos[key] #create new dictionary ordered by name
 
@@ -53,6 +55,7 @@ def calculate_pages(soup):
 
 #output the dictionary of crypto names to csv file
 def print_to_csv(cryptos):
+    print("Printing to csv...")
     crypto_names = []
     crypto_symbols = []
     crypto_urls = []
@@ -71,6 +74,8 @@ def print_to_csv(cryptos):
     file = 'cryptos.csv'
     dataframe.to_csv(file, index = False)
     
-    print("Data written to " + file + " successfully!")
+    print("----------------------------------------------")
+    print("- Data written to " + file + " successfully! -")
+    print("----------------------------------------------")
 
 scrape_crypto_names()
