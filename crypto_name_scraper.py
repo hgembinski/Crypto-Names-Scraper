@@ -11,22 +11,13 @@ import time
 
 def scrape_crypto_names():
     cryptos = {} #dictionary of coins
+    sorted_cryptos = {} #dictionary of sorted coins
     coinmarketcap = requests.get('https://coinmarketcap.com/')
     soup = BeautifulSoup(coinmarketcap.content, 'html.parser')
-    text = soup.findAll('p', {'class': 'sc-1eb5slv-0 kDEzev'}, string = re.compile("Showing"))
-    pages = calculate_pages(soup)
-
-    #scrape first page
-    print("Scraping page 1 of " + str(pages) + "...")
-    data = soup.find('script', id = "__NEXT_DATA__", type = "application/json")
-    crypto_data = json.loads(data.contents[0])
-    listings = crypto_data['props']['initialState']['cryptocurrency']['listingLatest']['data']
-
-    for i in listings:
-        cryptos[str(i['name'])] = str(i['symbol']), str(i['slug']) #add to dictionary
+    pages = calculate_pages(soup) #get # of pages
      
-    #scrape the rest of the pages
-    for i in range (2, pages + 1):
+    #scrape data from pages
+    for i in range (1, 2):
         time.sleep(0.5)
 
         print("Scraping page " + str(i) + " of " + str(pages) + "...")
@@ -38,12 +29,14 @@ def scrape_crypto_names():
         crypto_data = json.loads(data.contents[0])
         listings = crypto_data['props']['initialState']['cryptocurrency']['listingLatest']['data']
 
+        #add symbol and generated url to dictionary, name as key
         for i in listings:
-            cryptos[str(i['name'])] = str(i['symbol']), str(i['slug']) #add to dictionary
+            cryptos[str(i['name'])] = str(i['symbol']), "https://coinmarketcap.com/currencies/" + str(i['slug'])
     
-    for i in sorted(cryptos.keys()):
-        print(i + " " + str(cryptos[i]))
-    print("Total entries: " + str(len(cryptos)))
+    for key in sorted(cryptos):
+        sorted_cryptos[key] = cryptos[key] #create new dictionary ordered by name
+
+    print_to_csv(sorted_cryptos)
 
 
 #calculates the number of pages in the table of cryptos from the "Showing 1 - X out of Y" text
@@ -57,5 +50,25 @@ def calculate_pages(soup):
     pages = round(items_total / items_per_page) #calculate number of pages
 
     return pages
+
+#output the dictionary of crypto names to csv file
+def print_to_csv(cryptos):
+    crypto_names = []
+    crypto_symbols = []
+    crypto_urls = []
+
+    for key in cryptos:
+        crypto_names.append(str(key))
+        crypto_symbols.append(str(cryptos[key][0]))
+        crypto_urls.append(str(cryptos[key][1]))
+
+    dataframe = pandas.DataFrame(columns = ['name', 'symbol', 'url'])
+
+    dataframe['name'] = crypto_names
+    dataframe['symbol'] = crypto_symbols
+    dataframe['url'] = crypto_urls
+    
+    dataframe.to_csv('cryptonames.csv', index = False)
+    
 
 scrape_crypto_names()
