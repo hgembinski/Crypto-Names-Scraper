@@ -30,7 +30,7 @@ def scrape_crypto_names():
         time.sleep(0.5)
 
         print("Scraping page " + str(i) + " of " + str(pages) + "...")
-        url = 'https://coinmarketcap.com/?page=' + str(i) #generate the url
+        url = 'https://coinmarketcap.com/?page=' + str(i) #generate the page url
         site = requests.get(url)
         soup = BeautifulSoup(site.content, 'html.parser')
         
