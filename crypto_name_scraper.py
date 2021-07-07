@@ -3,24 +3,61 @@
 #available cryptocurrencies from CoinMarketCap.com.
 
 from bs4 import BeautifulSoup
+import tkinter
+from tkinter import *
 import re
 import requests
 import pandas
 import json
 import time
 
+#main function / GUI
 def scrape_crypto_names():
+    root = tkinter.Tk()
+    root.title("Crypto Name Scraper")
+    root.geometry("500x500")
+    root.config(bg = "light blue", highlightbackground = "steel blue", highlightcolor = "steel blue", highlightthickness = 10)
+
+    #GUI
+    titleframe = LabelFrame(root, bg = 'light blue', highlightbackground = "steel blue", highlightthickness = 10,
+                relief = "flat", height = 75, width = 310).place(x = 250, y = 27.5, anchor = "center")
+    title = Label(titleframe, text = "Crypto Name Scraper", bg = 'light blue',
+                font = (None, 20, "bold")).place(x = 250, y = 30, anchor = "center")
+    subtitle = Message(root, text = "This program compiles a list of all available cryptocurrencies on coinmarketcap.com", bg = 'light blue', 
+                font = (None, 15, "italic"), justify = "center", width = 500).place(x = 250, y = 100, anchor = "center")
+    activitytext = Label(root, text = "Currently Idle", bg = 'light blue', font = (None, 40))
+    activitytext.place(x = 250, y = 200, anchor = "center")
+    activitystatus = Message(root, text = "Click 'Go' to begin!", bg = 'light blue', width = 450, justify = "center", font = (None, 25))
+    activitystatus.place(x = 250, y = 275, anchor = "center")
+
+    #button calls scrape function
+    go_button = Button(root, bg = "green", activebackground = 'light green', text = "Go!", relief = "raised", 
+                font = (None, 30, "bold"))
+    go_button.place(x = 250, y = 400, anchor = "center")
+    go_button.config(command = lambda : scraper(root, activitytext, activitystatus, go_button))
+
+
+    root.mainloop()
+
+#main scrape function
+def scraper(root, activitytext, activitystatus, go_button):
+    activitytext.config(text = "Working on it...")
+    go_button.config(bg = "light grey", state = "disabled")
+
     cryptos = {} #dictionary of coins
     sorted_cryptos = {} #dictionary of sorted coins
     coinmarketcap = requests.get('https://coinmarketcap.com/')
     soup = BeautifulSoup(coinmarketcap.content, 'html.parser')
     pages = calculate_pages(soup) #get # of pages
+
      
     #scrape data from pages
     for i in range (1, pages + 1):
         time.sleep(0.5)
+        activitystatus.config(text = "Scraping page " + str(i) + " of " + str(pages) + "...")
+        print("beep " + str(i))
+        root.update()
 
-        print("Scraping page " + str(i) + " of " + str(pages) + "...")
         url = 'https://coinmarketcap.com/?page=' + str(i) #generate the page url
         site = requests.get(url)
         soup = BeautifulSoup(site.content, 'html.parser')
@@ -32,13 +69,16 @@ def scrape_crypto_names():
         #add symbol and generated url to dictionary, name as key
         for i in listings:
             cryptos[str(i['name'])] = str(i['symbol']), "https://coinmarketcap.com/currencies/" + str(i['slug'])
-    
-    print("Done scraping...")
 
     for key in sorted(cryptos):
         sorted_cryptos[key] = cryptos[key] #create new dictionary ordered by name
 
-    print_to_csv(sorted_cryptos)
+    file = 'cryptos.csv'
+    print_to_csv(sorted_cryptos, file)
+
+    activitytext.config(text = "Done!")
+    activitystatus.config(text = "Data has been written to " + file + " successfully!")
+    go_button.config(bg = "green", state = "normal")
 
 
 #calculates the number of pages in the table of cryptos from the "Showing 1 - X out of Y" text
@@ -54,8 +94,7 @@ def calculate_pages(soup):
     return pages
 
 #output the dictionary of crypto names to csv file
-def print_to_csv(cryptos):
-    print("Printing to csv...")
+def print_to_csv(cryptos, file):
     crypto_names = []
     crypto_symbols = []
     crypto_urls = []
@@ -71,11 +110,6 @@ def print_to_csv(cryptos):
     dataframe['symbol'] = crypto_symbols
     dataframe['url'] = crypto_urls
     
-    file = 'cryptos.csv'
     dataframe.to_csv(file, index = False)
-    
-    print("----------------------------------------------")
-    print("- Data written to " + file + " successfully! -")
-    print("----------------------------------------------")
 
 scrape_crypto_names()
