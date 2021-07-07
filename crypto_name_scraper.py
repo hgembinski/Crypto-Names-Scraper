@@ -48,12 +48,12 @@ def scraper(root, activitytext, activitystatus, go_button):
     sorted_cryptos = {} #dictionary of sorted coins
     coinmarketcap = requests.get('https://coinmarketcap.com/')
     soup = BeautifulSoup(coinmarketcap.content, 'html.parser')
-    pages = calculate_pages(soup) #get # of pages
+    pages = calculate_pages(soup) #get # of pages to scrape
 
      
     #scrape data from pages
     for i in range (1, pages + 1):
-        time.sleep(0.5)
+        time.sleep(0.5) #wait half a second between pages to avoid server timeout
         activitystatus.config(text = "Scraping page " + str(i) + " of " + str(pages) + "...")
         print("beep " + str(i))
         root.update()
@@ -70,9 +70,11 @@ def scraper(root, activitytext, activitystatus, go_button):
         for i in listings:
             cryptos[str(i['name'])] = str(i['symbol']), "https://coinmarketcap.com/currencies/" + str(i['slug'])
 
+    #create new dictionary ordered by name
     for key in sorted(cryptos):
-        sorted_cryptos[key] = cryptos[key] #create new dictionary ordered by name
+        sorted_cryptos[key] = cryptos[key]
 
+    #print to file
     file = 'cryptos.csv'
     print_to_csv(sorted_cryptos, file)
 
@@ -83,8 +85,8 @@ def scraper(root, activitytext, activitystatus, go_button):
 
 #calculates the number of pages in the table of cryptos from the "Showing 1 - X out of Y" text
 def calculate_pages(soup):
-    text = soup.findAll('p', {'class': 'sc-1eb5slv-0 kDEzev'}, string = re.compile("Showing"))
-    text_numbers = re.findall(r'\d+',str(text)) #get all the numbers in the "showing" line
+    text = soup.findAll('p', {'class': 'sc-1eb5slv-0 kDEzev'}, string = re.compile("Showing")) #find the correct html line
+    text_numbers = re.findall(r'\d+',str(text)) #find the numbers in the line
 
     items_total = int(text_numbers[len(text_numbers) - 1]) #get the max number of items from the last number found in the "showing" line
     items_per_page = int(text_numbers[len(text_numbers) - 2]) #get the items per page from the SECOND to last number found in "showing" line
