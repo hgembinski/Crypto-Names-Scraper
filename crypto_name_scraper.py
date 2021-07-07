@@ -16,6 +16,7 @@ def scrape_crypto_names():
     root = tkinter.Tk()
     root.title("Crypto Name Scraper")
     root.geometry("500x500")
+    root.resizable(False, False)
     root.config(bg = "light blue", highlightbackground = "steel blue", highlightcolor = "steel blue", highlightthickness = 10)
 
     #GUI
