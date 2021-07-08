@@ -56,7 +56,6 @@ def scraper(root, activitytext, activitystatus, go_button):
     for i in range (1, pages + 1):
         time.sleep(0.5) #wait half a second between pages to avoid server timeout
         activitystatus.config(text = "Scraping page " + str(i) + " of " + str(pages) + "...")
-        print("beep " + str(i))
         root.update()
 
         url = 'https://coinmarketcap.com/?page=' + str(i) #generate the page url
