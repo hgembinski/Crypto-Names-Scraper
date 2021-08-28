@@ -5,6 +5,7 @@ Scrapes all available crypto names and symbols from coinmarketcap.com, construct
 
 Utilizes BeautifulSoup, Pandas, and Tkinter.
 
+## Screenshots ##
 <table>
   <tr>
     <td align="center"><b>Idle Screen</b></td>
