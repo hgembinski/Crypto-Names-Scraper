@@ -85,8 +85,10 @@ def scraper(root, activitytext, activitystatus, go_button):
 
 #calculates the number of pages in the table of cryptos from the "Showing 1 - X out of Y" text
 def calculate_pages(soup):
-    text = soup.findAll('p', {'class': 'sc-1eb5slv-0 kDEzev'}, string = re.compile("Showing")) #find the correct html line
+    text = soup.findAll('p', string = re.compile("Showing")) #find the correct html line
+    print(text)
     text_numbers = re.findall(r'\d+',str(text)) #find the numbers in the line
+    print(text_numbers)
 
     items_total = int(text_numbers[len(text_numbers) - 1]) #get the max number of items from the last number found in the "showing" line
     items_per_page = int(text_numbers[len(text_numbers) - 2]) #get the items per page from the SECOND to last number found in "showing" line
