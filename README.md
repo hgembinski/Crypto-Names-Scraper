@@ -8,5 +8,5 @@ Utilizes BeautifulSoup, Pandas, and Tkinter.
 <br><i>Idle screen</i><br><br>
 ![Screenshot of working/in use screen](Screenshots/cns_working_screen.png?raw=true "Working Screen")
 <br><i>"Working" screen</i><br><br>
-![Screenshot of done screen](Screenshots/cns_done_screen.png?raw=true "Done Screen")
+![Screenshot of done screen](Screenshots/cns_done.png?raw=true "Done Screen")
 <br><i>Done screen</i><br><br>
