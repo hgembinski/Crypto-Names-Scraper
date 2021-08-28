@@ -5,13 +5,15 @@ Scrapes all available crypto names and symbols from coinmarketcap.com, construct
 
 Utilizes BeautifulSoup, Pandas, and Tkinter.
 
-![Screenshot of idle screen](Screenshots/cns_idle_screen.png?raw=true "Idle Screen")
-<br><i>Idle screen</i>
-
-
-![Screenshot of working/in use screen](Screenshots/cns_working_screen.png?raw=true "Working Screen")
-<br><i>"Working" screen</i>
-
-
-![Screenshot of done screen](Screenshots/cns_done.png?raw=true "Done Screen")
-<br><i>Done screen</i>
+<table>
+  <tr>
+    <td align="center"><b>Idle Screen</b></td>
+     <td align="center"><b>Working Screen</b></td>
+     <td align="center"><b>Done Screen</b></td>
+  </tr>
+  <tr>
+    <td><img src="Screenshots/cns_idle_screen.png" width=300 height=300></td>
+    <td><img src="Screenshots/cns_working_screen.png" width=300 height=300></td>
+    <td><img src="Screenshots/cns_done.png" width=300 height=300></td>
+  </tr>
+ </table>
